@@ -1,1 +1,236 @@
 
+#!/usr/bin/env python
+
+import math
+from math import sin, cos, pi
+import tf
+import rospy
+from std_msgs.msg import UInt16MultiArray
+from sensor_msgs.msg import NavSatFix
+from rtcm_msgs.msg import Message
+from geometry_msgs.msg import PoseStamped, Pose, Quaternion, Twist, Vector3
+from nav_msgs.msg import Odometry
+import numpy as np
+
+# Publisher for controlling key
+pub = rospy.Publisher('control_key', UInt16MultiArray, queue_size=10)
+odom_pub = rospy.Publisher('/Sikick/odom', Odometry, queue_size=50)
+odom_broadcaster = tf.TransformBroadcaster()
+
+# Initialize Kalman filter variables
+x_hat = np.array([0.0, 0.0, 0.0, 0.0, 0.0])  # Extended state estimate [x, y, theta, v, omega]
+P = np.eye(5)  # Initial error covariance matrix
+Q = np.eye(5) * 0.01  # Process noise covariance matrix (adjust as needed)
+R_gps = np.eye(2) * 0.1  # GPS measurement noise covariance matrix (adjust as needed)
+R_odom = np.eye(2) * 0.01  # Odometry measurement noise covariance matrix (adjust as needed)
+
+rtk_signal_strong = True  # flag, tracking
+
+current_x = 0.0
+current_y = 0.0
+current_theta = 0.0
+
+source = "Unknown"
+
+
+def callback1(msg):  # zed2/zed_node/odom
+    if not rtk_signal_strong:
+        # rospy.loginfo('zed_odometry')
+        signal = 1
+        # current_pose_zed = msg.pose.pose
+        # print(current_pose_zed)
+        # rospy.loginfo('current_pose_zed')
+        # print(msg.pose.position.x)
+        # print(msg.pose.position.y)
+
+
+def callback2(msg):  # ublox_gps/rtcm
+    global rtk_signal_strong
+    rtk_signal_strong = True
+    # rospy.loginfo('ublox_gps-RTK')
+
+
+def callback3(msg):  # ublox_gps/fix
+    global rtk_signal_strong
+    position_covariance = msg.position_covariance_type  # sensor_msgs/NavSatFix Message
+    threshold_value = 1  # Critical threshold value
+
+    # Check the value of position_covariance and update rtk_signal_strong
+    if position_covariance > threshold_value:  # Set your threshold value here
+        rtk_signal_strong = False
+        # rospy.loginfo('Bad signal RTK') # print Test OK
+    else:
+        rtk_signal_strong = True
+        # rospy.loginfo('Active RTK') # print Test OK
+
+
+def callback4(msg):  # utm
+    # rospy.loginfo('ublox_gps-UTM')
+    # print(msg.pose.position)
+    signal = 2
+
+    global current_x, current_y, utm_x, utm_y
+    utm_x = msg.pose.position.x
+    utm_y = msg.pose.position.y
+    # callback5(utm_x, utm_y)
+
+
+def callback_gps(msg):
+    global rtk_signal_strong, x_hat, P, current_x, current_y, current_theta
+
+    if not rtk_signal_strong:
+        # Extract GPS measurements
+        gps_x = msg.latitude
+        gps_y = msg.longitude
+
+        # Prediction step (assuming constant velocity and heading model)
+        dt = 1.0  # Assuming a fixed time step for simplicity
+        theta = x_hat[2]
+        v = x_hat[3]
+        omega = x_hat[4]
+
+        A = np.array([
+            [1, 0, -v * math.sin(theta) * dt, dt * math.cos(theta), 0],
+            [0, 1, v * math.cos(theta) * dt, dt * math.sin(theta), 0],
+            [0, 0, 1, 0, dt],
+            [0, 0, 0, 1, 0],
+            [0, 0, 0, 0, 1]
+        ])
+
+        B = np.zeros((5, 1))
+        u = np.zeros((5, 1))
+
+        # Predicted state estimate
+        x_hat_minus = np.dot(A, x_hat) + np.dot(B, u)
+
+        # Predicted error covariance
+        P_minus = np.dot(np.dot(A, P), A.T) + Q
+
+        # Update step (incorporating GPS measurement)
+        H_gps = np.array([
+            [1, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0]
+        ])
+
+        z_gps = np.array([gps_x, gps_y])
+
+        # Calculate the Kalman gain for GPS
+        K_gps = np.dot(np.dot(P_minus, H_gps.T), np.linalg.inv(np.dot(np.dot(H_gps, P_minus), H_gps.T) + R_gps))
+
+        # Update the state estimate using GPS
+        x_hat_minus += np.dot(K_gps, (z_gps - np.dot(H_gps, x_hat_minus)))
+
+        # Update the error covariance using GPS
+        P_minus = np.dot((np.eye(5) - np.dot(K_gps, H_gps)), P_minus)
+
+        # Set the current position based on the fused estimate
+        current_x = x_hat_minus[0]
+        current_y = x_hat_minus[1]
+        current_theta = x_hat_minus[2]
+        source = "Sensor Fusion (GPS)"
+
+    else:
+        # Handle the case when RTK signal is strong (use GPS/UTM data)
+        pass
+
+
+def callback_odom(msg):
+    global rtk_signal_strong, x_hat, P, current_x, current_y, current_theta
+
+    if not rtk_signal_strong:
+        # Extract odometry measurements
+        odom_v = msg.twist.twist.linear.x
+        odom_omega = msg.twist.twist.angular.z
+
+        # Prediction step (assuming constant velocity and heading model)
+        dt = 1.0  # Assuming a fixed time step for simplicity
+        theta = x_hat[2]
+        v = x_hat[3]
+        omega = x_hat[4]
+
+        A = np.array([
+            [1, 0, -v * math.sin(theta) * dt, dt * math.cos(theta), 0],
+            [0, 1, v * math.cos(theta) * dt, dt * math.sin(theta), 0],
+            [0, 0, 1, 0, dt],
+            [0, 0, 0, 1, 0],
+            [0, 0, 0, 0, 1]
+        ])
+
+        B = np.zeros((5, 1))
+        u = np.array([[odom_v], [odom_omega]])
+
+        # Predicted state estimate
+        x_hat_minus = np.dot(A, x_hat) + np.dot(B, u)
+
+        # Predicted error covariance
+        P_minus = np.dot(np.dot(A, P), A.T) + Q
+
+        # Update step (incorporating odometry measurement)
+        H_odom = np.array([
+            [0, 0, 0, 1, 0],
+            [0, 0, 0, 0, 1]
+        ])
+
+        z_odom = np.array([odom_v, odom_omega])
+
+        # Calculate the Kalman gain for odometry
+        K_odom = np.dot(np.dot(P_minus, H_odom.T), np.linalg.inv(np.dot(np.dot(H_odom, P_minus), H_odom.T) + R_odom))
+
+        # Update the state estimate using odometry
+        x_hat_minus += np.dot(K_odom, (z_odom - np.dot(H_odom, x_hat_minus)))
+
+        # Update the error covariance using odometry
+        P_minus = np.dot((np.eye(5) - np.dot(K_odom, H_odom)), P_minus)
+
+        # Set the current position based on the fused estimate
+        current_x = x_hat_minus[0]
+        current_y = x_hat_minus[1]
+        current_theta = x_hat_minus[2]
+        source = "Sensor Fusion (Odometry)"
+
+
+def Current_Odom_publisher(event):
+    global current_x, current_y, current_theta, source
+
+    odom = Odometry()
+    odom.header.stamp = rospy.Time.now()
+    odom.header.frame_id = 'odom'  # Adjust the frame_id as needed
+    odom.child_frame_id = 'base_link'  # Adjust the child_frame_id as needed
+
+    # Set the position in the Odometry message
+    odom.pose.pose.position.x = current_x
+    odom.pose.pose.position.y = current_y
+    odom.pose.pose.position.z = 0.0  # Assuming 2D localization
+
+    # Set the orientation in the Odometry message
+    odom.pose.pose.orientation = Quaternion(*tf.transformations.quaternion_from_euler(0, 0, current_theta))
+
+    # Set the twist in the Odometry message (optional)
+    odom.twist.twist.linear.x = 0.0  # Adjust linear and angular velocities as needed
+    odom.twist.twist.angular.z = 0.0
+
+    # Publish the Odometry message
+    odom_pub.publish(odom)
+    rospy.loginfo("Position Source: {}, x={}, y={}, theta={}".format(source, current_x, current_y, current_theta))
+
+
+def sensor_integrate():
+    rospy.init_node('sensor_integrate', anonymous=True)
+    rospy.Subscriber("/ublox_gps/fix", NavSatFix, callback3)
+    rospy.Subscriber("/zed2/zed_node/odom", Odometry, callback1)
+    rospy.Subscriber("/utm", PoseStamped, callback4)
+
+    rospy.Subscriber("/goal_positions", Pose, goal_positions_callback)  # PoseArray <-> Pose
+
+    rospy.Subscriber("/ublox_gps/fix", NavSatFix, callback_gps)
+    rospy.Subscriber("/zed2/zed_node/odom", Odometry, callback_odom)
+
+    rospy.Timer(rospy.Duration(1.0), Current_Odom_publisher)  # Adjust the duration as needed
+
+
+if __name__ == '__main__':
+    try:
+        sensor_integrate()
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass
