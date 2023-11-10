@@ -54,7 +54,8 @@ def callback5(msg):
     if not rtk_signal_strong:
         utm_x = msg.pose.position.x
         utm_y = msg.pose.position.y
-
+        
+        ################################################ Prediction ######################################################
         # Prediction step (assuming constant velocity model)
         A = np.eye(3)  # State transition matrix
         B = np.zeros(3)  # Control input matrix (not used here)
@@ -65,7 +66,9 @@ def callback5(msg):
 
         # Predicted error covariance
         P_minus = np.dot(np.dot(A, P), A.T) + Q
+        ###################################################################################################################
 
+        #################################################### Update #######################################################
         # Update step (incorporating UTM measurement)
         H = np.eye(3)  # Measurement matrix (identity for direct measurement)
         z = np.array([utm_x, utm_y, 0.0])  # Measurement vector
@@ -78,6 +81,8 @@ def callback5(msg):
 
         # Update the error covariance
         P = np.dot((np.eye(3) - np.dot(K, H)), P_minus)
+        ###################################################################################################################
+
 
         # Set the current position based on the fused estimate
         current_x = x_hat[0]
