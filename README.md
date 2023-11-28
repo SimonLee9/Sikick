@@ -30,6 +30,9 @@ sh gps-rtk [roslaunch ntrip_ros ntrip_ros.launch]
 sh gps-utm [roslaunch utm_lla coordinate_convertion.launch]
 
 
+### GPS+Odometry
+sh vins-ekf [roslaunch visual_ins vins-ekf.launch]
+
 ### USB
 sh usb [sudo chmod 777/dev/tty*]
 
