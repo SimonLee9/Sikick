@@ -25,11 +25,13 @@ sh rplidar
 
 sh gps [roslaunch ublox_gps ublox_device.launch]
 
-sh gps-rtk
+sh gps-rtk [roslaunch ntrip_ros ntrip_ros.launch]
 
-sh gps-utm
+sh gps-utm [roslaunch utm_lla coordinate_convertion.launch]
 
 
+### USB
+sh usb [sudo chmod 777/dev/tty*]
 
 ### steering_straight
 
