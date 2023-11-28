@@ -34,7 +34,7 @@ sh gps-utm [roslaunch utm_lla coordinate_convertion.launch]
 sh vins-ekf [roslaunch visual_ins vins-ekf.launch]
 
 
-### Target
+### Target position
 sh target [roslaunch goto_targetpositions traget_positions.launch]
 
 ### USB
