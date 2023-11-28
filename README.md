@@ -53,7 +53,7 @@ rosrun steering_striaght move.py
 ### 1-1.position tracking
 sh vins-ekf [roslaunch visual_ins vins-ekf.launch]
 
-### 1-2.target_path
+### 1-2.target_path [이동할 경로]
 roslaunch goto_targetpositions target_path.launch
 
 ### 1-3.target_positions
