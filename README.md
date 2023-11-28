@@ -23,7 +23,7 @@ sh rplidar
 
 ### GPS
 
-sh gps
+sh gps [roslaunch ublox_gps ublox_device.launch]
 
 sh gps-rtk
 
