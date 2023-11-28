@@ -1,0 +1,4 @@
+<launch>
+	<node name="VisualInsNode"          pkg="visual_ins"  type="integrate_EKF.py" output="screen">
+	</node>
+</launch>
