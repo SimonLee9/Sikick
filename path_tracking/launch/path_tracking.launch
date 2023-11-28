@@ -1,0 +1,4 @@
+<launch>
+	<node name="PathTrackingNode"          pkg="path_tracking"  type="purepursuit.py" output="screen">
+	</node>
+</launch>
