@@ -33,6 +33,10 @@ sh gps-utm [roslaunch utm_lla coordinate_convertion.launch]
 ### GPS+Odometry
 sh vins-ekf [roslaunch visual_ins vins-ekf.launch]
 
+
+### Target
+sh target [roslaunch goto_targetpositions traget_positions.launch]
+
 ### USB
 sh usb [sudo chmod 777/dev/tty*]
 
