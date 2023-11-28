@@ -45,3 +45,13 @@ sh usb [sudo chmod 777/dev/tty*]
 rosrun steering_straight teleop_key.py
 
 rosrun steering_striaght move.py
+
+## Test
+
+### Tracking
+
+### target_path
+roslaunch goto_targetpositions target_path.launch
+
+### target_positions
+roslaunch goto_targetpositions target_positions.launch
