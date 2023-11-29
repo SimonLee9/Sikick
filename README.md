@@ -37,6 +37,20 @@ sh vins-ekf [roslaunch visual_ins vins-ekf.launch]
 ### Target position
 sh target [roslaunch goto_targetpositions traget_positions.launch]
 
+### target path
+sh target_path
+x1: 351762.345724
+y1: 4025746.35403
+351762.345724, 4025746.35403
+
+x2?: 351775.80848
+y2?: 4025747.96584
+351775.80848, 4025747.96584
+
+X3: 351782.703744
+y3: 4025739.72508
+351782.703744, 4025739.72508
+
 ### USB
 sh usb [sudo chmod 777/dev/tty*]
 
