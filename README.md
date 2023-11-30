@@ -70,7 +70,7 @@ roslaunch visual_ins vins-ekf.launch
 
 ### 1-2.target_path [이동할 경로]
 sh target_path
-roslaunch goto_targetpositions target_path.launch
+roslaunch target_path target_path.launch
 
 ### 1-3.target_positions ??
 roslaunch goto_targetpositions target_positions.launch
