@@ -79,4 +79,4 @@ roslaunch goto_targetpositions target_positions.launch
 roslaunch path_tracking path_tracking.launch
 
 ### 1-6 gotoposition
-roslaunch goto_targetpositions goto_targetposition.launch
+roslaunch goto_targetpositions goto_targetpositions.launch
