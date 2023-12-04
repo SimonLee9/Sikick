@@ -82,6 +82,7 @@ roslaunch path_tracking path_tracking.launch
 ### 1-4 gotoposition
 sh gotoposition
 
+roslaunch path_tracking path_tracking.launch
 
 ### 1-3_2.target_positions ??
 roslaunch goto_targetpositions target_positions.launch
