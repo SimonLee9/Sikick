@@ -39,16 +39,20 @@ sh target [roslaunch goto_targetpositions traget_positions.launch]
 
 ### target path
 sh target_path
+
 X1: 351763.901
 Y1: 4025749.144
+
 351763.901, 4025749.144
 
 X2: 351783.3108
 Y2: 4025748.981
+
 351783.3108, 4025748.981
 
 X3: 351782.6192
 Y3: 4025739.505
+
 351782.6192, 4025739.505
 
 ### USB
