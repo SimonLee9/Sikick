@@ -1,8 +1,8 @@
 # Sikick
 
-## Function
+## - Function
 
-### Camera
+### - Camera
 
 sh cam
 
@@ -11,17 +11,17 @@ sh cam-obj
 sh yolo-custom
 
 
-### VSLAM
+### - VSLAM
 
 roslaunch zed_rtabmap_example zed_rtabmap.launch
 
 
-### 2D Lidar
+### - 2D Lidar
 
 sh rplidar
 
 
-### GPS
+### - GPS
 
 sh gps [roslaunch ublox_gps ublox_device.launch]
 
@@ -30,14 +30,14 @@ sh gps-rtk [roslaunch ntrip_ros ntrip_ros.launch]
 sh gps-utm [roslaunch utm_lla coordinate_convertion.launch]
 
 
-### GPS+Odometry
+### - GPS+Odometry
 sh vins-ekf [roslaunch visual_ins vins-ekf.launch] 
 
 
-### Target position
+### - Target position
 sh target [roslaunch goto_targetpositions traget_positions.launch]
 
-### target path
+### - target path
 sh target_path
 
 X1: 351763.901
@@ -55,10 +55,10 @@ Y3: 4025739.505
 
 351782.6192, 4025739.505
 
-### USB
+### - USB
 sh usb [sudo chmod 777/dev/tty*]
 
-### steering_straight
+### - steering_straight
 
 rosrun steering_straight teleop_key.py
 
