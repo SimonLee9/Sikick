@@ -74,15 +74,15 @@ sh target_path
 
 roslaunch target_path target_path.launch
 
-### 1-3.target_positions ??
-roslaunch goto_targetpositions target_positions.launch
-
-### 1-4.path_tracking
+### 1-3.path_tracking
 sh path_tracking
 
 roslaunch path_tracking path_tracking.launch
 
-### 1-6 gotoposition
+### 1-4 gotoposition
 sh gotoposition
 
+
+### 1-3_2.target_positions ??
+roslaunch goto_targetpositions target_positions.launch
 roslaunch goto_targetpositions goto_targetpositions.launch
