@@ -1,0 +1,4 @@
+<launch>
+	<node name="TargetPositionsNode"          pkg="target_path"  type="target_path.py" output="screen">
+	</node>
+</launch>
