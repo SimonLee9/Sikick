@@ -8,12 +8,12 @@ from std_msgs.msg import Float64
 class PwmController:
     def __init__(self):
         # Subscribers
-        self.drive_angle_sub = rospy.Subscriber('drive_angle', Float64, self.drive_angle_callback)
+        self.drive_angle_sub = rospy.Subscriber('speed_pwm', Float64, self.drive_angle_callback)
         self.steer_angle_sub = rospy.Subscriber('steer_angle', Float64, self.steer_angle_callback)
 
         # Publishers
-        self.drive_pwm_pub = rospy.Publisher('drive_pwm', Float64, queue_size=10)
-        self.steer_pwm_pub = rospy.Publisher('steer_pwm', Float64, queue_size=10)
+        self.drive_pwm_pub = rospy.Publisher('speed_drive_pwm', Float64, queue_size=10)
+        self.steer_pwm_pub = rospy.Publisher('steer_angle_pwm', Float64, queue_size=10)
 
     def drive_angle_callback(self, msg):
         # Convert drive angle to PWM (this is just a placeholder, you should replace this with your own logic)
