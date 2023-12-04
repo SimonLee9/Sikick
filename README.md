@@ -31,7 +31,7 @@ sh gps-utm [roslaunch utm_lla coordinate_convertion.launch]
 
 
 ### GPS+Odometry
-sh vins-ekf [roslaunch visual_ins vins-ekf.launch] # integrate_EKF.py
+sh vins-ekf [roslaunch visual_ins vins-ekf.launch] 
 
 
 ### Target position
@@ -67,7 +67,7 @@ rosrun steering_striaght move.py
 ### 1-1.position tracking
 sh vins-ekf 
 
-roslaunch visual_ins vins-ekf.launch
+roslaunch visual_ins vins-ekf.launch # integrate_EKF.py
 
 ### 1-2.target_path [이동할 경로]
 sh target_path
@@ -77,7 +77,7 @@ roslaunch target_path target_path.launch
 ### 1-3.path_tracking
 sh path_tracking
 
-roslaunch path_tracking path_tracking.launch
+roslaunch path_tracking path_tracking.launch # purepursuit.py
 
 ### 1-4 gotoposition
 sh gotoposition
