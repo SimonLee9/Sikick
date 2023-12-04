@@ -39,7 +39,7 @@ class SensorIntegrator:
 
         # Subscribe to the topic publishing goal_positions
         # rospy.Subscriber("/goal_positions_topic", PoseArray, self.goal_positions_callback)
-        rospy.Subscriber("/goal_positions_topic", Path, self.goal_positions_callback)
+        rospy.Subscriber("/goal_path-positions_topic", Path, self.goal_positions_callback)
 
         self.distance_pub = rospy.Publisher('/distance_to_goal_topic', Float32, queue_size=10)
 
