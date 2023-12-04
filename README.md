@@ -64,6 +64,9 @@ rosrun steering_straight teleop_key.py
 
 rosrun steering_striaght move.py
 
+### moing_sikick
+roslaunch moving_sikick moving.launch
+
 ## Test
 
 ### 1.Tracking
