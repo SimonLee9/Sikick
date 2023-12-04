@@ -31,7 +31,7 @@ sh gps-utm [roslaunch utm_lla coordinate_convertion.launch]
 
 
 ### GPS+Odometry
-sh vins-ekf [roslaunch visual_ins vins-ekf.launch]
+sh vins-ekf [roslaunch visual_ins vins-ekf.launch] # integrate_EKF.py
 
 
 ### Target position
