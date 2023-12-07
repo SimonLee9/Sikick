@@ -1,6 +1,20 @@
 # Sikick
 
 ---
+## Hardware 
+
+### MCU - pin mapping
+
+아두이노 나노 PWM 핀 (D3,D5,D6,D9,D10,D11)
+
+Sikick - mcu 핀 맵
+- D9 (3pin) : 조향
+- D10 (3pin) : 라이다
+- D11 (2pin) : Drive, 구동 (모터 구동)
+- D12 (2pin) : 부저
+
+
+---
 
 ## Function
 
