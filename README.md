@@ -1,6 +1,43 @@
 # Sikick
 
 ---
+## Driving
+
+### Sensor On
+
+sh cam
+
+sh gps
+
+sh gps-rtk
+
+sh gps-utm
+
+
+
+### 1-1.position tracking
+sh vins-ekf 
+
+roslaunch visual_ins vins-ekf.launch # integrate_EKF.py
+
+### 1-2.target_path [이동할 경로]
+sh target_path
+
+roslaunch target_path target_path.launch
+
+### 1-3.path_tracking
+sh path_tracking
+
+roslaunch path_tracking path_tracking.launch # purepursuit.py
+
+### 1-4 gotoposition
+sh gotoposition
+
+roslaunch goto_targetpositions goto_targetpositions.launch
+
+
+
+---
 ## Hardware 
 
 ### MCU - pin mapping
