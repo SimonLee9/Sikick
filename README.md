@@ -23,7 +23,7 @@ mcu-rosserial :
 
 rosrun rosserial_python serial_node.py _port:=/dev/ttyUSB2 _baud:=57600
 
-## Tracking
+## 1.Tracking
 
 ### 1.1. position tracking
 sh vins-ekf 
