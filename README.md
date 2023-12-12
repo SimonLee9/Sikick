@@ -109,7 +109,7 @@ roslaunch path_tracking path_tracking.launch # purepursuit.py
 ### 1-4 gotoposition
 sh gotoposition
 
-roslaunch path_tracking path_tracking.launch
+roslaunch goto_targetpositions goto_targetpositions.launch
 
 ### 1-3_2.target_positions ??
 roslaunch goto_targetpositions target_positions.launch
