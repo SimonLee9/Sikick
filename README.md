@@ -5,7 +5,7 @@
 
 ### 0.System On
 
-### 0.1 Sensor
+### 0.1. Sensor
 sh cam
 
 sh gps
@@ -14,7 +14,7 @@ sh gps-rtk
 
 sh gps-utm
 
-### 0.2 MCU
+### 0.2. MCU
 mcu-connection check : 
 
 ls -al /dev/serial/by-id
@@ -23,22 +23,24 @@ mcu-rosserial :
 
 rosrun rosserial_python serial_node.py _port:=/dev/ttyUSB2 _baud:=57600
 
-### 1-1.position tracking
+## Tracking
+
+### 1.1. position tracking
 sh vins-ekf 
 
 roslaunch visual_ins vins-ekf.launch # integrate_EKF.py
 
-### 1-2.target_path [이동할 경로]
+### 1.2.target_path [이동할 경로]
 sh target_path
 
 roslaunch target_path target_path.launch
 
-### 1-3.path_tracking
+### 1.3.path_tracking
 sh path_tracking
 
 roslaunch path_tracking path_tracking.launch # purepursuit.py
 
-### 1-4 gotoposition
+### 1.4. gotoposition
 sh gotoposition
 
 roslaunch goto_targetpositions goto_targetpositions.launch
