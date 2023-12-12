@@ -3,7 +3,7 @@
 ---
 ## Driving
 
-### Sensor On
+### 0.System On
 
 sh cam
 
@@ -13,7 +13,13 @@ sh gps-rtk
 
 sh gps-utm
 
+mcu-connection check : 
 
+ls -al /dev/serial/by-id
+
+mcu-rosserial :
+
+rosrun rosserial_python serial_node.py _port:=/dev/ttyUSB2 _baud:=57600
 
 ### 1-1.position tracking
 sh vins-ekf 
