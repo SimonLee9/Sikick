@@ -5,6 +5,7 @@
 
 ### 0.System On
 
+### 0.1 Sensor
 sh cam
 
 sh gps
@@ -13,7 +14,7 @@ sh gps-rtk
 
 sh gps-utm
 
-
+### 0.2 MCU
 mcu-connection check : 
 
 ls -al /dev/serial/by-id
