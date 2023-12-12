@@ -31,6 +31,12 @@ sh vins-ekf
 
 roslaunch visual_ins vins-ekf.launch # integrate_EKF.py
 
+or 
+
+sh ins
+
+roslaunch visual_ins vins-notyet.launch
+
 ### 1.2.target_path [이동할 경로]
 sh target_path
 
