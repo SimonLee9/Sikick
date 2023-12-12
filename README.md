@@ -13,6 +13,7 @@ sh gps-rtk
 
 sh gps-utm
 
+
 mcu-connection check : 
 
 ls -al /dev/serial/by-id
