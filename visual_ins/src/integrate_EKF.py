@@ -6,7 +6,7 @@ from std_msgs.msg import UInt16MultiArray, Float32
 from sensor_msgs.msg import NavSatFix
 from rtcm_msgs.msg import Message
 from geometry_msgs.msg import PoseStamped, PoseArray, Twist, Pose, Quaternion
-from nav_msgs.msg import Odometry
+from nav_msgs.msg import Odometry, Path
 import numpy as np
 from nav_msgs.msg import Path
 
@@ -18,6 +18,7 @@ class SensorIntegrator:
     #def __init__(self, goal_positions):
     def __init__(self): # Remove goal_positions as an argument
         self.pub = rospy.Publisher('control_key', UInt16MultiArray, queue_size=10)
+        #self.odom_pub = rospy.Publisher('/Sikick/odom', Odometry, queue_size=50)
         self.odom_pub = rospy.Publisher('/Sikick/odom', Odometry, queue_size=50)
         self.pose_pub = rospy.Publisher('/Sikick/pose',PoseStamped, queue_size=10)
 
@@ -39,14 +40,15 @@ class SensorIntegrator:
 
         # Subscribe to the topic publishing goal_positions
         # rospy.Subscriber("/goal_positions_topic", PoseArray, self.goal_positions_callback)
-        rospy.Subscriber("/goal_path-positions_topic", Path, self.goal_positions_callback)
+        #rospy.Subscriber("/goal_path_positions_topic", Path, self.goal_positions_callback)
 
         self.distance_pub = rospy.Publisher('/distance_to_goal_topic', Float32, queue_size=10)
 
+    '''
     def goal_positions_callback(self, msg):
         # Update goal_positions when a new message is received
         self.goal_positions = [(pose.position.x, pose.position.y) for pose in msg.pose]
-
+    
     def get_next_goal(self):
 
         min_distance = float('inf')
@@ -60,7 +62,7 @@ class SensorIntegrator:
 
     def navigate_to_goal(self, goal):
         # Create a publisher for the cmd_vel topic
-        pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
+        #pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
         # Create a Twist message
         twist = Twist()
@@ -97,11 +99,11 @@ class SensorIntegrator:
             twist.linear.x = distance_to_goal
 
         # Publish the Twist message
-        pub.publish(twist)       
+        #pub.publish(twist)       
         
         # Publish the distance to the goal
         self.distance_pub.publish(distance_to_goal)
-
+    '''
     #def callback1(self, msg):
     def odom_callback(self, msg):
         if not self.rtk_signal_strong:
@@ -220,7 +222,7 @@ class SensorIntegrator:
         rospy.Subscriber("/utm", PoseStamped, self.posestamped_callback3) # callback6
 
         #rospy.Subscriber("/goal_positions", Pose, self.goal_positions_callback)
-        rospy.Subscriber("/goal_positions", Path, self.goal_positions_callback)
+        #rospy.Subscriber("/goal_positions", Path, self.goal_positions_callback)
 
         rospy.Timer(rospy.Duration(1.0), self.Current_Odom_publisher)
 
